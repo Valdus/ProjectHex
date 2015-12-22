@@ -78,20 +78,20 @@ public class Tile : MonoBehaviour {
 		if (SelectionManager.isMoving) {
 			isHoveredOver = true;
 			SetMaterial(BoardGenerator.tileSelectedMaterial);
-			SelectionManager.currentTileHoveredOver = this;
+			SelectionManager.currentTile = this;
 		}
 	}
 
 	void OnMouseExit() {
 		isHoveredOver = false;
 		SetMaterial(originalMaterial);
-		SelectionManager.currentTileHoveredOver = null;
+		SelectionManager.currentTile = null;
 	}
 
 	// To reset hover after moving has ended.
 	public void DeHoverOver() {
 		isHoveredOver = false;
 		SetMaterial(originalMaterial);
-		SelectionManager.currentTileHoveredOver = null;
+		SelectionManager.currentTile = null;
 	}
 }

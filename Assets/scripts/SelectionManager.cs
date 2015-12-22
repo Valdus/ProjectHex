@@ -5,7 +5,7 @@ public class SelectionManager : MonoBehaviour {
 	public static UnitBase currentUnitHoveredOver = null;
 	public static UnitBase currentUnitSelected = null;
 
-	public static Tile currentTileHoveredOver = null;
+	public static Tile currentTile = null;
 
 	public static bool isMoving = false;
 
@@ -19,16 +19,7 @@ public class SelectionManager : MonoBehaviour {
 	void Update() {
 		if (Input.GetMouseButtonDown(0)) {
 			if (isMoving) {
-				if (currentTileHoveredOver != null) {
-					if (currentUnitSelected.CanMoveTo(currentTileHoveredOver)) {
-						currentUnitSelected.MoveTo(currentTileHoveredOver);
-						isMoving = false;
-						currentTileHoveredOver.DeHoverOver();
-					}
-				} else if (currentUnitHoveredOver != null) {
-					SelectUnit(currentUnitHoveredOver);
-					isMoving = false;
-				}
+				DoMovement();
 			} else {
 				if (currentUnitHoveredOver != null) {
 					SelectUnit(currentUnitHoveredOver);
@@ -36,20 +27,51 @@ public class SelectionManager : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetKeyDown(KeyCode.M)) {
-			isMoving = true;
-		}
+	    if (Input.GetKeyDown(KeyCode.Escape))
+	    {
+	        EscapePressed();
+	    } 
 	}
 
-	public static void SelectUnit(UnitBase unit) {
+	private void SelectUnit(UnitBase unit) {
 		if (unit == null) return;
 		if (unit == currentUnitSelected) return;
-
-		if (currentUnitSelected != null) {
-			currentUnitSelected.Deselect();
-		}
-
+	    if(currentUnitSelected != null)
+            currentUnitSelected.Deselect();
 		currentUnitSelected = unit;
 		currentUnitSelected.Select();
+	    SetIsMoving();
 	}
+
+    private void EscapePressed()
+    {
+        if (currentUnitSelected == null)
+        {
+            //Menu code here
+        }
+        if (currentUnitSelected != null)
+            currentUnitSelected.Deselect();
+        
+    }
+
+    private void SetIsMoving()
+    {
+        isMoving = !isMoving;
+    }
+
+    private void DoMovement()
+    {
+        if (currentUnitSelected.CanMoveTo(currentTile))
+        {
+            currentUnitSelected.MoveTo(currentTile);
+            SetIsMoving();
+            currentTile.DeHoverOver();
+        }
+        else if (currentUnitHoveredOver != null)
+        {
+            SelectUnit(currentUnitHoveredOver);
+            SetIsMoving();
+        }
+    }
+
 }
