@@ -2,20 +2,15 @@
 using System.Collections;
 
 public class Tile : MonoBehaviour {
-	public int id;
-	public int height = 0;
+	public int Id;
+
+    private int _y;
+    private int _x;
+    private int _z;
 
 	private int[] _position = new int[2];
-	public int[] position {
-		get {
-			return _position;
-		}
-		set {
-			_position = value;
-		}
-	}
 
-	public bool isHoveredOver = false;
+    public bool isHoveredOver = false;
 
 	public UnitBase unitOnTile = null;
 
@@ -26,6 +21,20 @@ public class Tile : MonoBehaviour {
 	private const float hexagonSpacingMultiplierX = 1.724f; // The multiplier for spacing out the hexagons nicely. Found by testing. (X direction)
 	private const float hexagonSpacingMultiplierY = 1.49f; // (Y direction)
 
+    protected int GetXPosition()
+    {
+        return _x;
+    }
+
+    protected int GetZPosition()
+    {
+        return _z;
+    }
+
+    protected int GetYPosition()
+    {
+        return _y;
+    }
 	// Use this for initialization
 	void Start() {
 	}
@@ -35,17 +44,19 @@ public class Tile : MonoBehaviour {
 
 	}
 
-	public void Init(int[] position, int height, Material material) {
-		this.position = position;
-		this.height = height;
+	public void Init(int x,int y, int z, Material material)
+	{
+	    _x = x;
+	    _z = z;
+	    _y = y;
 		this.SetMaterial(material);
 	}
 
 	public Vector3 GetWorldPosition() {
-		if (position[1] % 2 == 0) { // Offset every other row
-			return new Vector3(position[0] * hexagonSpacingMultiplierX, height, position[1] * hexagonSpacingMultiplierY);
+		if (GetZPosition() % 2 == 0) { // Offset every other row
+			return new Vector3(GetXPosition() * hexagonSpacingMultiplierX, GetYPosition(), GetZPosition() * hexagonSpacingMultiplierY);
 		} else {
-			return new Vector3((position[0]) * hexagonSpacingMultiplierX + (hexagonSpacingMultiplierX / 2), height, position[1] * hexagonSpacingMultiplierY);
+			return new Vector3((GetXPosition()) * hexagonSpacingMultiplierX + (hexagonSpacingMultiplierX / 2), GetYPosition(), GetZPosition() * hexagonSpacingMultiplierY);
 		}
 	}
 
