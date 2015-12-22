@@ -16,7 +16,6 @@ public class BoardGenerator : MonoBehaviour {
 	public Material _tileSelectedMaterial;
 	public static Material tileSelectedMaterial;
 
-	// Use this for initialization
 	void Start() {
 		BoardGenerator.tileSelectedMaterial = _tileSelectedMaterial;
 	    List<TileData> tileData = new List<TileData>();
@@ -24,20 +23,27 @@ public class BoardGenerator : MonoBehaviour {
 	    {
 	        for (int j = 0; j < 10; j++)
 	        {
-	            tileData.Add(new TileData(i,0,j,redMaterial));
+	            tileData.Add(new TileData(j,0,i,redMaterial));
 	        }
 	    }
 		//BuildBoard(10, 10);
         BuildBoard(tileData);
+
+		Team.teams.Add(new Team(0));
+		Team.teams.Add(new Team(1));
+
 		UnitSoldier soldier = ((GameObject) Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
 		soldier.MoveTo(tiles[2]);
+		Team.GetTeam(0).AddUnit(soldier);
+
 		soldier = ((GameObject) Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
 		soldier.MoveTo(tiles[4]);
-	}
+		Team.GetTeam(1).AddUnit(soldier);
 
-	// Update is called once per frame
-	void Update() {
 
+		soldier = ((GameObject)Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
+		soldier.MoveTo(tiles[11]);
+		Team.GetTeam(0).AddUnit(soldier);
 	}
 
     void BuildBoard(List<TileData> dataTiles )

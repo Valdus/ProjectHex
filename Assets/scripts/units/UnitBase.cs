@@ -14,7 +14,7 @@ public class UnitBase : MonoBehaviour {
 	private int _currentHealth;
 	public int currentHealth {
 		get {
-			return currentHealth;
+			return _currentHealth;
 		} set {
 			_currentHealth = value;
 
@@ -42,15 +42,6 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	void Update() {
-		if (isSelected) {
-			if (Input.GetKeyDown(KeyCode.Q) && abilities[0] != null) {
-				abilityTargeting = abilities[0];
-			}
-		}
-
-		if (Input.GetMouseButtonDown(0) && !SelectionManager.isMoving && abilityTargeting != null && SelectionManager.currentUnitHoveredOver != null) {
-			abilityTargeting.UseAbility(SelectionManager.currentUnitHoveredOver.tileOn);
-		}
 	}
 
 	protected void Init() {
@@ -78,6 +69,7 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	public bool CanMoveTo(Tile tile) {
+		if (tile == null) return false;
 		if (!tile.IsEmpty()) return false;
 		if (tile == tileOn) return false; 
 
@@ -129,5 +121,10 @@ public class UnitBase : MonoBehaviour {
 	public void Damage(int damage) {
 		currentHealth -= damage;
 		Debug.Log(currentHealth);
+	}
+
+	public AbilityBase GetAbility(int ability) {
+		if (abilities[ability] != null) return abilities[ability];
+		else return null;
 	}
 }

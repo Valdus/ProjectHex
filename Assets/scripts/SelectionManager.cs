@@ -7,8 +7,9 @@ public class SelectionManager : MonoBehaviour {
 
 	public static Tile currentTile = null;
 
-	public static bool isMoving = false;
+	public static AbilityBase currentAbilityTargeting = null;
 
+	public static bool isMoving = false;
 
 	// Use this for initialization
 	void Start() {
@@ -18,11 +19,15 @@ public class SelectionManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		if (Input.GetMouseButtonDown(0)) {
-			if (isMoving) {
-				DoMovement();
+			if (currentAbilityTargeting != null && currentUnitHoveredOver != null) {
+				UseAbility(currentUnitHoveredOver, currentAbilityTargeting);
 			} else {
-				if (currentUnitHoveredOver != null) {
-					SelectUnit(currentUnitHoveredOver);
+				if (isMoving) {
+					DoMovement();
+				} else {
+					if (currentUnitHoveredOver != null) {
+						SelectUnit(currentUnitHoveredOver);
+					}
 				}
 			}
 		}
@@ -31,6 +36,16 @@ public class SelectionManager : MonoBehaviour {
 	    {
 	        EscapePressed();
 	    } 
+
+		if (Input.GetKeyDown(KeyCode.Q) && currentUnitSelected != null) {
+			currentAbilityTargeting = currentUnitSelected.GetAbility(0);
+		}
+
+	}
+
+	private void UseAbility(UnitBase target, AbilityBase abiltiy) {
+		abiltiy.UseAbility(currentUnitHoveredOver.tileOn);
+		currentAbilityTargeting = null;
 	}
 
 	private void SelectUnit(UnitBase unit) {
@@ -64,7 +79,7 @@ public class SelectionManager : MonoBehaviour {
         if (currentUnitSelected.CanMoveTo(currentTile))
         {
             currentUnitSelected.MoveTo(currentTile);
-            SetIsMoving();
+         //   SetIsMoving();
             currentTile.DeHoverOver();
         }
         else if (currentUnitHoveredOver != null)
