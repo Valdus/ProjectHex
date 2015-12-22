@@ -8,8 +8,6 @@ public class Tile : MonoBehaviour {
     private int _x;
     private int _z;
 
-	private int[] _position = new int[2];
-
     public bool isHoveredOver = false;
 
 	public UnitBase unitOnTile = null;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class UnitBase : MonoBehaviour {
@@ -8,8 +9,22 @@ public class UnitBase : MonoBehaviour {
 	public int jumpHeight;
 	public int damage;
 	public int maxHealth;
-	public int currentHealth;
 	public int team;
+
+	private int _currentHealth;
+	public int currentHealth {
+		get {
+			return currentHealth;
+		} set {
+			_currentHealth = value;
+
+			if (_currentHealth > maxHealth) {
+				_currentHealth = maxHealth;
+			} else if (_currentHealth < 0) {
+				_currentHealth = 0;	
+			}
+		}
+	}
 
 	private float unitHeightOffset = 1.566f; // For placing the unit at a correct height on top of a tile.
 
@@ -20,7 +35,22 @@ public class UnitBase : MonoBehaviour {
 
 	private Component halo;
 
+	protected List<AbilityBase> abilities = new List<AbilityBase>();
+	protected AbilityBase abilityTargeting = null;
+
 	void Start() {
+	}
+
+	void Update() {
+		if (isSelected) {
+			if (Input.GetKeyDown(KeyCode.Q) && abilities[0] != null) {
+				abilityTargeting = abilities[0];
+			}
+		}
+
+		if (Input.GetMouseButtonDown(0) && !SelectionManager.isMoving && abilityTargeting != null && SelectionManager.currentUnitHoveredOver != null) {
+			abilityTargeting.UseAbility(SelectionManager.currentUnitHoveredOver.tileOn);
+		}
 	}
 
 	protected void Init() {
@@ -90,5 +120,14 @@ public class UnitBase : MonoBehaviour {
 
 	public void SetTeam(int t) {
 		team = t;
+	}
+
+	public bool IsEnemy(UnitBase unit) {
+		return team != unit.team;
+	}
+
+	public void Damage(int damage) {
+		currentHealth -= damage;
+		Debug.Log(currentHealth);
 	}
 }

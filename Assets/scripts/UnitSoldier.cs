@@ -8,6 +8,7 @@ public class UnitSoldier : UnitBase {
 		damage = 20;
 		maxHealth = 100;
 		currentHealth = maxHealth;
+		abilities.Add(new AbilityNuke(this));
 
 		Init();
 	}
