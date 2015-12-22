@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{B9ADC80E-80FB-8AB4-3D0C-E8CEAA20EEE3}</ProjectGuid>
+	<ProjectGuid>{900BE100-134C-34E9-6E9F-C1FD6AF6627E}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\BoardGenerator.cs" />
+     <Compile Include="Assets\scripts\SelectionManager.cs" />
      <Compile Include="Assets\scripts\Tile.cs" />
      <Compile Include="Assets\scripts\UnitBase.cs" />
      <Compile Include="Assets\scripts\UnitSoldier.cs" />

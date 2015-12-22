@@ -12,12 +12,17 @@ public class BoardGenerator : MonoBehaviour {
 	public Material redMaterial;
 	public Material greenMaterial;
 	public Material greyMaterial;
+	public Material _tileSelectedMaterial;
+	public static Material tileSelectedMaterial;
 
 	// Use this for initialization
 	void Start() {
+		BoardGenerator.tileSelectedMaterial = _tileSelectedMaterial;
 		BuildBoard(10, 10);
 		UnitSoldier soldier = ((GameObject) Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
 		soldier.MoveTo(tiles[2]);
+		soldier = ((GameObject) Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
+		soldier.MoveTo(tiles[4]);
 	}
 
 	// Update is called once per frame
@@ -33,10 +38,8 @@ public class BoardGenerator : MonoBehaviour {
 				GameObject tileGameObject = (GameObject) Instantiate(baseHexagonPrefab, new Vector3(0, 0, 0), baseHexagonPrefab.transform.rotation);
 				Tile tile = tileGameObject.AddComponent<Tile>();
 
-				tile.position = new int[] { x, y };
-				tile.height = h;
+				tile.Init(new int[] { x, y }, h, x % 3 == 0 ? greenMaterial : (x % 2 == 0 ? redMaterial : greyMaterial));
 				tileGameObject.transform.position = tile.GetWorldPosition();
-				tileGameObject.GetComponent<Renderer>().material = x % 3 == 0 ? greenMaterial : (x % 2 == 0 ? redMaterial : greyMaterial); // Just showing off colors, in true Christmas spirit. :D
 				tileGameObject.transform.parent = tileParent.transform;
 				tiles.Add(tile);
 			}

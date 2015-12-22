@@ -8,5 +8,7 @@ public class UnitSoldier : UnitBase {
 		damage = 20;
 		maxHealth = 100;
 		currentHealth = maxHealth;
+
+		Init();
 	}
 }
