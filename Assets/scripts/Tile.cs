@@ -75,7 +75,7 @@ public class Tile : MonoBehaviour {
 	void OnMouseEnter() {
 		if (SelectionManager.isMoving) {
 			isHoveredOver = true;
-			SetMaterial(BoardGenerator.tileSelectedMaterial);
+			SetMaterial(BoardGenerator.boardGenerator.tileSelectedMaterial);
 			SelectionManager.currentTile = this;
 		}
 	}

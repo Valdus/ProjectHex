@@ -4,12 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class UnitBase : MonoBehaviour {
+public abstract class UnitBase : MonoBehaviour {
 	public int movementDistance;
 	public int jumpHeight;
 	public int damage;
 	public int maxHealth;
-	public int team;
+
+	public Team team;
 
 	private int _currentHealth;
 	public int currentHealth {
@@ -35,6 +36,7 @@ public class UnitBase : MonoBehaviour {
 
 	private Component halo;
 
+	protected static GameObject modelPrefab;
 	protected List<AbilityBase> abilities = new List<AbilityBase>();
 	protected AbilityBase abilityTargeting = null;
 
@@ -110,12 +112,12 @@ public class UnitBase : MonoBehaviour {
 		halo.GetType().GetProperty("enabled").SetValue(halo, f, null);
 	}
 
-	public void SetTeam(int t) {
+	public void SetTeam(Team t) {
 		team = t;
 	}
 
 	public bool IsEnemy(UnitBase unit) {
-		return team != unit.team;
+		return team.GetTeamNumber() != unit.team.GetTeamNumber();
 	}
 
 	public void Damage(int damage) {
@@ -126,5 +128,9 @@ public class UnitBase : MonoBehaviour {
 	public AbilityBase GetAbility(int ability) {
 		if (abilities[ability] != null) return abilities[ability];
 		else return null;
+	}
+
+	public GameObject GetModelPrefab() {
+		return modelPrefab;
 	}
 }

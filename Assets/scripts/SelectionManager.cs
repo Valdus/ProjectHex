@@ -79,7 +79,7 @@ public class SelectionManager : MonoBehaviour {
         if (currentUnitSelected.CanMoveTo(currentTile))
         {
             currentUnitSelected.MoveTo(currentTile);
-         //   SetIsMoving();
+            SetIsMoving();
             currentTile.DeHoverOver();
         }
         else if (currentUnitHoveredOver != null)

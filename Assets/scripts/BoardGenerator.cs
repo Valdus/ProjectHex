@@ -13,11 +13,12 @@ public class BoardGenerator : MonoBehaviour {
 	public Material redMaterial;
 	public Material greenMaterial;
 	public Material greyMaterial;
-	public Material _tileSelectedMaterial;
-	public static Material tileSelectedMaterial;
+	public Material tileSelectedMaterial;
+
+	public static BoardGenerator boardGenerator;
 
 	void Start() {
-		BoardGenerator.tileSelectedMaterial = _tileSelectedMaterial;
+		BoardGenerator.boardGenerator = this;
 	    List<TileData> tileData = new List<TileData>();
 	    for (int i = 0; i < 10; i++)
 	    {
@@ -29,21 +30,32 @@ public class BoardGenerator : MonoBehaviour {
 		//BuildBoard(10, 10);
         BuildBoard(tileData);
 
-		Team.teams.Add(new Team(0));
-		Team.teams.Add(new Team(1));
+		List<UnitData> units = new List<UnitData>();
 
-		UnitSoldier soldier = ((GameObject) Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
-		soldier.MoveTo(tiles[2]);
-		Team.GetTeam(0).AddUnit(soldier);
+		units.Add(new UnitData(2, 0, soldierPrefab));
+		units.Add(new UnitData(4, 1, soldierPrefab));
+		units.Add(new UnitData(11, 0, soldierPrefab));
 
-		soldier = ((GameObject) Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
-		soldier.MoveTo(tiles[4]);
-		Team.GetTeam(1).AddUnit(soldier);
+		AddUnits(units);
+	}
 
+	void AddTeams(int number) {
+		for (int i = 0; i < number; i++) {
+			Team.AddTeam();
+		}
+	}
 
-		soldier = ((GameObject)Instantiate(soldierPrefab)).GetComponent<UnitSoldier>();
-		soldier.MoveTo(tiles[11]);
-		Team.GetTeam(0).AddUnit(soldier);
+	void AddUnits(List<UnitData> units) {
+		foreach (UnitData unitData in units) {
+			UnitBase unit = ((GameObject)Instantiate(unitData.GetUnitPrefab())).GetComponent<UnitBase>();
+			unit.MoveTo(tiles[unitData.GetTileId()]);
+
+			int teamNumber = unitData.GetTeamNumber();
+
+			if (!Team.DoesTeamExist(teamNumber)) Team.AddTeam(teamNumber);
+
+			Team.GetTeam(teamNumber).AddUnit(unit);
+		}
 	}
 
     void BuildBoard(List<TileData> dataTiles )
@@ -57,6 +69,8 @@ public class BoardGenerator : MonoBehaviour {
             tileGameObject.transform.position = tile.GetWorldPosition();
             tileGameObject.transform.parent = tileParent.transform;
             tiles.Add(tile);
+
+			// We should add unit data into TileData.cs and put unit data into a list and then call AddUnits(List<UnitData>) to add units onto the board.
 
         }
     }
