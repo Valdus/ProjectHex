@@ -9,6 +9,20 @@ public class Team {
 
 	private static List<Team> teams = new List<Team>();
 
+
+	private int _totalActionPoints = 0;
+	public int totalActionPoints {
+		get {
+			return _totalActionPoints;
+		} set {
+			_totalActionPoints = value;
+
+			if (_totalActionPoints < 0) {
+				_totalActionPoints = 0;
+			}
+		}
+	}
+
 	public Team(int teamNumber) {
 		this.teamNumber = teamNumber;
 	}
@@ -24,6 +38,14 @@ public class Team {
 		return teamNumber;
 	}
 
+	public bool IsTurn() {
+		return TurnManager.currentTeamMoving == this;
+	}
+
+	public List<UnitBase> GetUnits() {
+		return units;
+	}
+
 	public static Team GetTeam(int teamNumber) {
 		return teams.Find(x => x.teamNumber == teamNumber);
 	}
@@ -37,7 +59,10 @@ public class Team {
 	}
 
 	public static bool DoesTeamExist(int teamNumber) {
-		Team result = teams.Find(x => x.teamNumber == teamNumber);
-		return result != null;
+		return GetTeam(teamNumber) != null;
+	}
+
+	public static List<Team> GetAllTeams() {
+		return teams;
 	}
 }

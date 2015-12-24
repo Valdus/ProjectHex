@@ -73,7 +73,9 @@ public class Tile : MonoBehaviour {
 	}
 
 	void OnMouseEnter() {
-		if (SelectionManager.isMoving) {
+		UnitBase unit = SelectionManager.currentUnitSelected;
+
+		if (SelectionManager.isMoving && unit.GetTeam().IsTurn() && unit.CheckEnoughActionPoints(unit.GetActionPointCostToMoveTo(this))) {
 			isHoveredOver = true;
 			SetMaterial(BoardGenerator.boardGenerator.tileSelectedMaterial);
 			SelectionManager.currentTile = this;

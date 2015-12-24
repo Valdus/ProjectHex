@@ -5,16 +5,19 @@ public abstract class AbilityBase {
 	public readonly AbilityType abilityType;
 	public readonly AbilityTarget abilityTarget;
 
+	public readonly int actionPointCost;
+
 	protected UnitBase self;
 
 	private int abilityCooldown;
 	private int currentCooldown = 0;
 
-	public AbilityBase(AbilityType ab, AbilityTarget at, UnitBase unit, int cooldown) {
+	public AbilityBase(AbilityType ab, AbilityTarget at, UnitBase unit, int cooldown, int cost) {
 		abilityType = ab;
 		abilityTarget = at;
 		self = unit;
 		abilityCooldown = cooldown;
+		actionPointCost = cost;
 	}
 
 	abstract public void UseAbility(Tile target);

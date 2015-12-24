@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System;
 
 public abstract class UnitBase : MonoBehaviour {
-	public int movementDistance;
-	public int jumpHeight;
-	public int damage;
-	public int maxHealth;
+	protected int maxActionPoints;
+	protected int currentActionPoints;
+	protected int jumpHeight;
+	protected int damage;
+	protected int maxHealth;
 
-	public Team team;
+	protected Team team;
 
 	private int _currentHealth;
 	public int currentHealth {
@@ -46,6 +47,8 @@ public abstract class UnitBase : MonoBehaviour {
 	void Update() {
 	}
 
+	abstract public void SetStats();
+
 	protected void Init() {
 		try {
 			halo = transform.FindChild("halo").GetComponent("Halo");
@@ -56,6 +59,25 @@ public abstract class UnitBase : MonoBehaviour {
 	}
 
 	public void MoveTo(Tile tile) {
+		if (CheckEnoughActionPoints(GetActionPointCostToMoveTo(tile))) { // Hard coded for now, add movement distance later.
+			if (tile.IsEmpty()) {
+				if (CanMoveTo(tile)) {
+					if (tileOn != null) {
+						tileOn.unitOnTile = null;
+					}
+
+					tileOn = tile;
+					tile.unitOnTile = this;
+					transform.parent = tile.transform;
+					transform.position = tile.transform.position + new Vector3(-1.2f, unitHeightOffset, 0);
+
+					UseActionPoints(GetActionPointCostToMoveTo(tile)); // Hard coded for now, add movement distance later.
+				}
+			}
+		}
+	}
+
+	public void AddUnitToBoard(Tile tile) {
 		if (tile.IsEmpty()) {
 			if (CanMoveTo(tile)) {
 				if (tileOn != null) {
@@ -78,6 +100,37 @@ public abstract class UnitBase : MonoBehaviour {
 		// Some move logic here
 
 		return true;
+	}
+
+	public int GetActionPointCostToMoveTo(Tile tile) {
+		// Some move logic here
+
+		return 1;
+	}
+
+	public void TurnStart() {
+		currentActionPoints = maxActionPoints;
+		team.totalActionPoints += maxActionPoints;
+
+		foreach (AbilityBase ability in abilities) {
+			ability.DecreaseCooldown();
+		}
+	}
+
+	public void UseActionPoints(int amount) {
+		if (!CheckEnoughActionPoints(amount)) {
+			Debug.Log("Not enough action points!");
+			return;
+		}
+
+		currentActionPoints -= amount;
+		team.totalActionPoints -= amount;
+		Debug.Log("Action points: " + currentActionPoints);
+		Debug.Log("Team action points: " + team.totalActionPoints);
+	}
+
+	public bool CheckEnoughActionPoints(int amount) {
+		return currentActionPoints - amount >= 0;
 	}
 
 	void OnMouseEnter() {
@@ -114,6 +167,10 @@ public abstract class UnitBase : MonoBehaviour {
 
 	public void SetTeam(Team t) {
 		team = t;
+	}
+
+	public Team GetTeam() {
+		return team;
 	}
 
 	public bool IsEnemy(UnitBase unit) {

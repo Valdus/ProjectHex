@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class UnitSoldier : UnitBase {
-	void Start() {
-		movementDistance = 3;
+	override public void SetStats() {
+		maxActionPoints = 3;
+		currentActionPoints = maxActionPoints;
 		jumpHeight = 2;
 		damage = 20;
 		maxHealth = 100;

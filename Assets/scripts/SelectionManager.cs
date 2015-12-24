@@ -37,7 +37,7 @@ public class SelectionManager : MonoBehaviour {
 	        EscapePressed();
 	    } 
 
-		if (Input.GetKeyDown(KeyCode.Q) && currentUnitSelected != null) {
+		if (Input.GetKeyDown(KeyCode.Q) && currentUnitSelected != null && currentUnitSelected.GetTeam().IsTurn() && currentUnitSelected.CheckEnoughActionPoints(currentUnitSelected.GetAbility(0).actionPointCost)) {
 			currentAbilityTargeting = currentUnitSelected.GetAbility(0);
 		}
 
