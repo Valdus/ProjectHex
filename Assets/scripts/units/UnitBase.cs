@@ -149,6 +149,7 @@ public abstract class UnitBase : MonoBehaviour {
 	public void Select() {
 		SetHaloEnabled(true);
 		isSelected = true;
+		GUIManager.SetAbilityButtonIcons(abilities);
 	}
 
 	public void Deselect() {
@@ -179,6 +180,11 @@ public abstract class UnitBase : MonoBehaviour {
 
 	public void Damage(int damage) {
 		currentHealth -= damage;
+		Debug.Log(currentHealth);
+	}
+
+	public void Heal(int health) {
+		currentHealth += health;
 		Debug.Log(currentHealth);
 	}
 

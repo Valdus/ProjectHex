@@ -10,6 +10,7 @@ public class UnitSoldier : UnitBase {
 		maxHealth = 100;
 		currentHealth = maxHealth;
 		abilities.Add(new AbilityNuke(this));
+		abilities.Add(new AbilityHeal(this));
 
 		Init();
 	}

@@ -37,10 +37,22 @@ public class SelectionManager : MonoBehaviour {
 	        EscapePressed();
 	    } 
 
+		// Abilites
 		if (Input.GetKeyDown(KeyCode.Q) && currentUnitSelected != null && currentUnitSelected.GetTeam().IsTurn() && currentUnitSelected.CheckEnoughActionPoints(currentUnitSelected.GetAbility(0).actionPointCost)) {
-			currentAbilityTargeting = currentUnitSelected.GetAbility(0);
+			TargetAbilitiy(currentUnitSelected.GetAbility(0));
 		}
 
+		if (Input.GetKeyDown(KeyCode.W) && currentUnitSelected != null && currentUnitSelected.GetTeam().IsTurn() && currentUnitSelected.CheckEnoughActionPoints(currentUnitSelected.GetAbility(0).actionPointCost)) {
+			TargetAbilitiy(currentUnitSelected.GetAbility(1));
+		}
+	}
+
+	public static void TargetAbilitiy(AbilityBase ability) {
+		if (ability.abilityTarget == AbilityTarget.none) {
+			ability.UseAbility();
+		} else {
+			currentAbilityTargeting = ability;
+		}
 	}
 
 	private void UseAbility(UnitBase target, AbilityBase abiltiy) {

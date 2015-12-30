@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class AbilityNuke : AbilityBase {
 	const int damage = 10;
 	
-	public AbilityNuke(UnitBase unit) : base(AbilityType.active, AbilityTarget.enemy, unit, 10, 2) {
+	public AbilityNuke(UnitBase unit) : base(AbilityType.active, AbilityTarget.enemy, unit, 10, 2, "images/abilities/ability_nuke") {
 
 	}
 
@@ -26,5 +27,9 @@ public class AbilityNuke : AbilityBase {
 			PutOnCooldown();
 			self.UseActionPoints(actionPointCost);
 		}
+	}
+
+	public override void UseAbility() {
+		throw new NotImplementedException();
 	}
 }
