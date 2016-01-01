@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
+// Unity doesn't stop propogation of clicks/hovering through GUI elements... for some reason
+// Which is the literal only reason why this class exists
 public class GUIBase : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 	public static bool mouseOn = false;
 	
