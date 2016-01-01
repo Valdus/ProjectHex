@@ -38,7 +38,10 @@ public abstract class UnitBase : MonoBehaviour {
 	private Component halo;
 
 	protected static GameObject modelPrefab;
+
 	protected List<AbilityBase> abilities = new List<AbilityBase>();
+	protected List<ModifierBase> modifiers = new List<ModifierBase>();
+
 	protected AbilityBase abilityTargeting = null;
 
 	void Start() {
@@ -108,12 +111,20 @@ public abstract class UnitBase : MonoBehaviour {
 		return 1;
 	}
 
-	public void TurnStart() {
+	public void RoundStart() {
 		currentActionPoints = maxActionPoints;
 		team.totalActionPoints += maxActionPoints;
+	}
 
+	public void TurnEnd() {
 		foreach (AbilityBase ability in abilities) {
 			ability.DecreaseCooldown();
+		}
+
+		List<ModifierBase> tempModifiers = new List<ModifierBase>(modifiers); // Modifiers may be removed during the loop
+
+		foreach (ModifierBase modifier in tempModifiers) {
+			modifier.TurnEnd();
 		}
 	}
 
@@ -134,12 +145,14 @@ public abstract class UnitBase : MonoBehaviour {
 	}
 
 	void OnMouseEnter() {
+		if (GUIBase.mouseOn) return;
+
 		SetHaloEnabled(true);
 		isHoveredOver = true;
 		SelectionManager.currentUnitHoveredOver = this;
 	}
 
-	void OnMouseExit() {
+	public void OnMouseExit() {
 		if (!isSelected) SetHaloEnabled(false);
 		isHoveredOver = false;
 		SelectionManager.currentUnitHoveredOver = null;
@@ -179,13 +192,36 @@ public abstract class UnitBase : MonoBehaviour {
 	}
 
 	public void Damage(int damage) {
+		modifiers.ForEach(x => x.Damage(ref damage));
+
 		currentHealth -= damage;
-		Debug.Log(currentHealth);
+		Debug.Log("Damaged, now at " + currentHealth);
 	}
 
 	public void Heal(int health) {
+		modifiers.ForEach(x => x.Heal(ref health));
+
 		currentHealth += health;
-		Debug.Log(currentHealth);
+		Debug.Log("Healed, now at " + currentHealth);
+	}
+
+	public void SetMaxHealth(int health) {
+		if (health > 0) {
+			modifiers.ForEach(x => x.SetMaxHealth(ref health));
+
+			int old = maxHealth;
+			maxHealth = health;
+			ScaleHealth(old);
+		}
+	}
+
+	public int GetMaxHealth() {
+		return maxHealth;
+	}
+
+	private void ScaleHealth(int oldMaxHealth) {
+		float p = currentHealth / oldMaxHealth;
+		currentHealth = (int) Mathf.Floor(maxHealth * p);
 	}
 
 	public AbilityBase GetAbility(int ability) {
@@ -195,5 +231,28 @@ public abstract class UnitBase : MonoBehaviour {
 
 	public GameObject GetModelPrefab() {
 		return modelPrefab;
+	}
+
+	public void AddModifier(ModifierBase modifier) {
+		if (modifier != null) {
+			modifiers.Add(modifier);
+		}
+	}
+
+	private void RemoveModifier(ModifierBase modifier) {
+		modifier.Remove();
+	}
+
+	public List<ModifierBase> GetModifiers() {
+		return modifiers;
+	}
+
+	public void CheckAOEModifiers() {
+		foreach (ModifierBase modifier in modifiers) {
+			// Check if the unit is in the radius of the AOE modifiers they don't own (usually after moving).
+			if (modifier.GetType().IsAssignableFrom(typeof(AOEModifierBase)) && !((AOEModifierBase) modifier).IsUnitInRadius(this)) {
+				RemoveModifier(modifier);
+			}
+		}
 	}
 }

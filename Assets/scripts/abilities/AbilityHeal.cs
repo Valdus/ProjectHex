@@ -4,7 +4,7 @@ using System.Collections;
 public class AbilityHeal : AbilityBase {
 	const int heal = 10;
 
-	public AbilityHeal(UnitBase unit) : base(AbilityType.active, AbilityTarget.none, unit, 5, 1, "images/abilities/ability_heal") {
+	public AbilityHeal(UnitBase unit, int abilityPosition) : base(AbilityType.active, AbilityTarget.none, unit, 5, 1, "images/abilities/ability_heal", abilityPosition) {
 
 	}
 
@@ -19,7 +19,7 @@ public class AbilityHeal : AbilityBase {
 		}
 
 		self.Heal(heal);
-		PutOnCooldown();
+		StartCooldown();
 		self.UseActionPoints(actionPointCost);
 	}
 

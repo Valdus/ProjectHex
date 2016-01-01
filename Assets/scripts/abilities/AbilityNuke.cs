@@ -5,7 +5,7 @@ using System;
 public class AbilityNuke : AbilityBase {
 	const int damage = 10;
 	
-	public AbilityNuke(UnitBase unit) : base(AbilityType.active, AbilityTarget.enemy, unit, 10, 2, "images/abilities/ability_nuke") {
+	public AbilityNuke(UnitBase unit, int abilityPosition) : base(AbilityType.active, AbilityTarget.enemy, unit, 10, 2, "images/abilities/ability_nuke", abilityPosition) {
 
 	}
 
@@ -24,7 +24,7 @@ public class AbilityNuke : AbilityBase {
 
 		if (self.IsEnemy(targetUnit)) {
 			targetUnit.Damage(damage);
-			PutOnCooldown();
+			StartCooldown();
 			self.UseActionPoints(actionPointCost);
 		}
 	}

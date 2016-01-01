@@ -72,7 +72,9 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	void OnMouseEnter() {
+	void OnMouseOver() {
+		if (GUIBase.mouseOn || SelectionManager.currentTile == this) return;
+
 		UnitBase unit = SelectionManager.currentUnitSelected;
 
 		if (SelectionManager.isMoving && unit.GetTeam().IsTurn() && unit.CheckEnoughActionPoints(unit.GetActionPointCostToMoveTo(this))) {
@@ -82,7 +84,7 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	void OnMouseExit() {
+	public void OnMouseExit() {
 		isHoveredOver = false;
 		SetMaterial(originalMaterial);
 		SelectionManager.currentTile = null;

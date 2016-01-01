@@ -10,15 +10,10 @@ public class SelectionManager : MonoBehaviour {
 	public static AbilityBase currentAbilityTargeting = null;
 
 	public static bool isMoving = false;
-
-	// Use this for initialization
-	void Start() {
-
-	}
 	
 	// Update is called once per frame
 	void Update() {
-		if (Input.GetMouseButtonDown(0)) {
+		if (Input.GetMouseButtonDown(0) && ! GUIBase.mouseOn) { // GUIBase.mouseOn is because unit does not have built in stoppage of click propogation through buttons.... (weird, right?)
 			if (currentAbilityTargeting != null && currentUnitHoveredOver != null) {
 				UseAbility(currentUnitHoveredOver, currentAbilityTargeting);
 			} else {
@@ -38,20 +33,22 @@ public class SelectionManager : MonoBehaviour {
 	    } 
 
 		// Abilites
-		if (Input.GetKeyDown(KeyCode.Q) && currentUnitSelected != null && currentUnitSelected.GetTeam().IsTurn() && currentUnitSelected.CheckEnoughActionPoints(currentUnitSelected.GetAbility(0).actionPointCost)) {
+		if (Input.GetKeyDown(KeyCode.Q) && currentUnitSelected != null) {
 			TargetAbilitiy(currentUnitSelected.GetAbility(0));
 		}
 
-		if (Input.GetKeyDown(KeyCode.W) && currentUnitSelected != null && currentUnitSelected.GetTeam().IsTurn() && currentUnitSelected.CheckEnoughActionPoints(currentUnitSelected.GetAbility(0).actionPointCost)) {
+		if (Input.GetKeyDown(KeyCode.W) && currentUnitSelected != null) {
 			TargetAbilitiy(currentUnitSelected.GetAbility(1));
 		}
 	}
 
 	public static void TargetAbilitiy(AbilityBase ability) {
-		if (ability.abilityTarget == AbilityTarget.none) {
-			ability.UseAbility();
-		} else {
-			currentAbilityTargeting = ability;
+		if (currentUnitSelected != null && currentUnitSelected.GetTeam().IsTurn() && currentUnitSelected.CheckEnoughActionPoints(ability.actionPointCost)) {
+			if (ability.abilityTarget == AbilityTarget.none) {
+				ability.UseAbility();
+			} else {
+				currentAbilityTargeting = ability;
+			}
 		}
 	}
 
@@ -76,8 +73,10 @@ public class SelectionManager : MonoBehaviour {
         {
             //Menu code here
         }
-        if (currentUnitSelected != null)
-            currentUnitSelected.Deselect();
+		if (currentUnitSelected != null) {
+			currentUnitSelected.Deselect();
+			GUIManager.SetAbilityButtonIcons(null);
+		}
         
     }
 

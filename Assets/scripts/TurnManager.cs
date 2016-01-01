@@ -8,38 +8,46 @@ public class TurnManager {
 
 	public static int turnNumber = 0;
 
-	public static void StartTurn() {
+	private static void StartRound() {
 		foreach (Team team in Team.GetAllTeams()) {
 			team.totalActionPoints = 0;
 
 			foreach (UnitBase unit in team.GetUnits()) {
-				unit.TurnStart();
+				unit.RoundStart();
 			}
 		}
 
 		Debug.Log("Turn " + turnNumber);
 	}
 
-	public static void NextTurn() {
+	private static void EndTurn() {
+		foreach (UnitBase unit in currentTeamMoving.GetUnits()) {
+			unit.TurnEnd();
+		}
+	}
+
+	public static void NextRound() {
 		turnNumber++;
 		currentTeamMoving = Team.GetAllTeams()[0];
-		StartTurn();
+		StartRound();
 	}
 
 	public static void TeamDone() {
 		Team nextTeam = GetNextTeam();
 
 		if (nextTeam == null) {
-			Debug.Log("Next turn!");
-			NextTurn();
+			Debug.Log("Next round!");
+			EndTurn();
+			NextRound();
 		} else {
+			EndTurn();
 			Debug.Log("Current team: " + Team.GetAllTeams().IndexOf(currentTeamMoving));
 			Debug.Log("Next team: " + Team.GetAllTeams().IndexOf(nextTeam));
 			currentTeamMoving = nextTeam;
 		}
 	}
 
-	public static Team GetNextTeam() {
+	private static Team GetNextTeam() {
 		try {
 			return Team.GetAllTeams()[Team.GetAllTeams().IndexOf(currentTeamMoving) + 1];
 		} catch (Exception e) {

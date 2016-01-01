@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Assets.scripts;
 
 public class BoardGenerator : MonoBehaviour {
-	public List<Tile> tiles = new List<Tile>();
+	public static List<Tile> tiles = new List<Tile>();
 
 	public GameObject baseHexagonPrefab;
 	public GameObject tileParent;
@@ -36,7 +36,7 @@ public class BoardGenerator : MonoBehaviour {
 
 		AddUnits(units);
 
-		TurnManager.NextTurn();
+		TurnManager.NextRound();
 	}
 
 	void AddTeams(int number) {
@@ -72,6 +72,10 @@ public class BoardGenerator : MonoBehaviour {
 			// We should add unit data into TileData.cs and put unit data into a list and then call AddUnits(List<UnitData>) to add units onto the board.
 
 		}
+	}
+
+	public static List<Tile> GetTiles() {
+		return tiles;
 	}
 	/*
 	void BuildBoard(int width, int height) {

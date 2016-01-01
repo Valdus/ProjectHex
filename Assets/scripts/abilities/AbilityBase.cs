@@ -17,40 +17,47 @@ public abstract class AbilityBase {
 	private int abilityCooldown;
 	private int currentCooldown = 0;
 
-	public AbilityBase(AbilityType ab, AbilityTarget at, UnitBase unit, int cooldown, int cost, string icon) {
+	public AbilityBase(AbilityType ab, AbilityTarget at, UnitBase unit, int cooldown, int cost, string icon, int abilityPosition) {
 		abilityType = ab;
 		abilityTarget = at;
 		self = unit;
 		abilityCooldown = cooldown;
 		actionPointCost = cost;
 		abilityIcon = Resources.Load<Sprite>(icon);
+		this.abilityPosition = abilityPosition;
 	}
 
 	abstract public void UseAbility(Tile target);
 	abstract public void UseAbility();
 
 	public void DecreaseCooldown() {
+		if (abilityType == AbilityType.passive) return;
+
 		SetCooldown(currentCooldown - 1);
 	}
 
 	public int GetCurrentCooldown() {
-		return currentCooldown;
+		if (abilityType == AbilityType.passive) return -1;
+		else return currentCooldown;
 	}
 
 	public bool IsOnCooldown() {
-		return currentCooldown > 0;
+		if (abilityType == AbilityType.passive) return false;
+		else return currentCooldown > 0;
 	}
 
-	public void PutOnCooldown() {
+	public void StartCooldown() {
+		if (abilityType == AbilityType.passive) return;
+
 		SetCooldown(abilityCooldown);
 	}
 
 	private void SetCooldown(int c) {
+		if (abilityType == AbilityType.passive) return;
+
 		currentCooldown = c;
 		
-		if (currentCooldown < 0) {
-			currentCooldown = 0;
-		}
+		if (currentCooldown < 0) currentCooldown = 0;
 
 		if (button != null) {
 			button.SetCooldown(currentCooldown);

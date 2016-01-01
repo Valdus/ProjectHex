@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Team {
 	private List<UnitBase> units = new List<UnitBase>();
+	private static List<UnitBase> allUnits = new List<UnitBase>();
 
 	private readonly int teamNumber;
 
@@ -32,6 +33,7 @@ public class Team {
 
 		unit.SetTeam(this);
 		units.Add(unit);
+		allUnits.Add(unit);
 	}
 
 	public int GetTeamNumber() {
@@ -64,5 +66,9 @@ public class Team {
 
 	public static List<Team> GetAllTeams() {
 		return teams;
+	}
+
+	public static List<UnitBase> GetAllUnits() {
+		return allUnits;
 	}
 }
