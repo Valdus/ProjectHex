@@ -62,7 +62,7 @@ public abstract class UnitBase : MonoBehaviour {
 	}
 
 	public void MoveTo(Tile tile) {
-		if (CheckEnoughActionPoints(GetActionPointCostToMoveTo(tile))) { // Hard coded for now, add movement distance later.
+		if (CheckEnoughActionPoints(GetActionPointCostToMoveTo(tile))) {
 			if (tile.IsEmpty()) {
 				if (CanMoveTo(tile)) {
 					if (tileOn != null) {
@@ -74,7 +74,7 @@ public abstract class UnitBase : MonoBehaviour {
 					transform.parent = tile.transform;
 					transform.position = tile.transform.position + new Vector3(-1.2f, unitHeightOffset, 0);
 
-					UseActionPoints(GetActionPointCostToMoveTo(tile)); // Hard coded for now, add movement distance later.
+					UseActionPoints(GetActionPointCostToMoveTo(tile));
 				}
 			}
 		}
@@ -98,11 +98,12 @@ public abstract class UnitBase : MonoBehaviour {
 	public bool CanMoveTo(Tile tile) {
 		if (tile == null) return false;
 		if (!tile.IsEmpty()) return false;
-		if (tile == tileOn) return false; 
+		if (tile == tileOn) return false;
+		if (tileOn == null) return true;
 
-		// Some move logic here
+		Debug.Log(Tile.GetDistance(tileOn, tile));
 
-		return true;
+		return false;
 	}
 
 	public int GetActionPointCostToMoveTo(Tile tile) {
@@ -143,6 +144,10 @@ public abstract class UnitBase : MonoBehaviour {
 	public bool CheckEnoughActionPoints(int amount) {
 		return currentActionPoints - amount >= 0;
 	}
+	public int GetCurrentActionPoints() {
+		return currentActionPoints;
+	}
+
 
 	void OnMouseEnter() {
 		if (GUIBase.mouseOn) return;
@@ -162,7 +167,6 @@ public abstract class UnitBase : MonoBehaviour {
 	public void Select() {
 		SetHaloEnabled(true);
 		isSelected = true;
-		GUIManager.SetAbilityButtonIcons(abilities);
 	}
 
 	public void Deselect() {
@@ -227,6 +231,10 @@ public abstract class UnitBase : MonoBehaviour {
 	public AbilityBase GetAbility(int ability) {
 		if (abilities[ability] != null) return abilities[ability];
 		else return null;
+	}
+
+	public List<AbilityBase> GetAbilities() {
+		return new List<AbilityBase>(abilities);
 	}
 
 	public GameObject GetModelPrefab() {

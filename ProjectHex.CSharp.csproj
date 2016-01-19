@@ -89,10 +89,13 @@
     <Compile Include="Assets\scripts\modifiers\ModifierHealth.cs" />
     <Compile Include="Assets\scripts\modifiers\ModifierTanky.cs" />
     <Compile Include="Assets\scripts\ui\AbilityButton.cs" />
+    <Compile Include="Assets\scripts\ui\ActionPointsBar.cs" />
     <Compile Include="Assets\scripts\ui\ButtonBase.cs" />
     <Compile Include="Assets\scripts\ui\EndTurnButton.cs" />
     <Compile Include="Assets\scripts\ui\GUIBase.cs" />
     <Compile Include="Assets\scripts\ui\GUIManager.cs" />
+    <Compile Include="Assets\scripts\ui\HealthBar.cs" />
+    <Compile Include="Assets\scripts\ui\TeamActionPointsBar.cs" />
     <Compile Include="Assets\scripts\units\UnitBase.cs" />
     <Compile Include="Assets\scripts\units\UnitData.cs" />
     <Compile Include="Assets\scripts\units\UnitSoldier.cs" />

@@ -40,6 +40,7 @@ public class AbilityButton : ButtonBase {
 			if (ability != null) ability.button = null;
 			ability = null;
 			SetCooldown(0);
+			abilityImage.sprite = null;
 			hasChanged = true;
 		}
 	}

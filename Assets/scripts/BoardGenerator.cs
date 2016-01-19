@@ -64,7 +64,7 @@ public class BoardGenerator : MonoBehaviour {
 			GameObject tileGameObject =
 				(GameObject) Instantiate(baseHexagonPrefab, new Vector3(0, 0, 0), baseHexagonPrefab.transform.rotation);
 			Tile tile = tileGameObject.AddComponent<Tile>();
-			tile.Init(tileData.GetX(), tileData.GetY(), tileData.GetZ(), redMaterial);
+			tile.Init(tileData.GetX(), tileData.GetY(), tileData.GetZ(), tileData.GetX() % 3 == 0 ? greenMaterial : (tileData.GetX() % 2 == 0 ? redMaterial : greyMaterial));
 			tileGameObject.transform.position = tile.GetWorldPosition();
 			tileGameObject.transform.parent = tileParent.transform;
 			tiles.Add(tile);

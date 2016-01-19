@@ -13,7 +13,7 @@ public class SelectionManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
-		if (Input.GetMouseButtonDown(0) && ! GUIBase.mouseOn) { // GUIBase.mouseOn is because unit does not have built in stoppage of click propogation through buttons.... (weird, right?)
+		if (Input.GetMouseButtonDown(0) && ! GUIBase.mouseOn) { // GUIBase.mouseOn is because unity does not have built in stoppage of click propogation through buttons.... (weird, right?)
 			if (currentAbilityTargeting != null && currentUnitHoveredOver != null) {
 				UseAbility(currentUnitHoveredOver, currentAbilityTargeting);
 			} else {
@@ -64,7 +64,8 @@ public class SelectionManager : MonoBehaviour {
             currentUnitSelected.Deselect();
 		currentUnitSelected = unit;
 		currentUnitSelected.Select();
-	    SetIsMoving();
+		GUIManager.SelectUnit(currentUnitSelected);
+		SetIsMoving(true);
 	}
 
     private void EscapePressed()
@@ -75,14 +76,15 @@ public class SelectionManager : MonoBehaviour {
         }
 		if (currentUnitSelected != null) {
 			currentUnitSelected.Deselect();
-			GUIManager.SetAbilityButtonIcons(null);
+			SetIsMoving(false);
+			GUIManager.SelectUnit(null);
 		}
         
     }
 
-    private void SetIsMoving()
+    private void SetIsMoving(bool m)
     {
-        isMoving = !isMoving;
+		isMoving = m;
     }
 
     private void DoMovement()
@@ -90,13 +92,13 @@ public class SelectionManager : MonoBehaviour {
         if (currentUnitSelected.CanMoveTo(currentTile))
         {
             currentUnitSelected.MoveTo(currentTile);
-            SetIsMoving();
+            SetIsMoving(false);
             currentTile.DeHoverOver();
         }
         else if (currentUnitHoveredOver != null)
         {
             SelectUnit(currentUnitHoveredOver);
-            SetIsMoving();
+            SetIsMoving(true);
         }
     }
 
